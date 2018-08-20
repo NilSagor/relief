@@ -2,7 +2,7 @@ import os
 import uuid
 
 from django.db import models
-from django.core.validtors import RegexValidator
+from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 
 
@@ -29,7 +29,7 @@ districts = (
 		('chd', 'Chandpur'),
 		('cht', 'Chittagong'),
 		('com', 'Comilla'),
-		('cox', 'Cox's Bazar),
+		('cox', 'Cox\'s Bazar'),
 		('fen', 'Feni'),
 		('khg', 'Khagrachhari'),
 		('lkh', 'Lakshmipur'),
@@ -61,14 +61,28 @@ districts = (
 		('jam', 'Jamalpur'),
 		('mym', 'Mymensingh'),
 
-
-
 	)
 
-status_types = (
+status_type = (
 	('new', 'New'),
 	('pro', 'In progress'),
 	('sup', 'Supplied'),
+)
+
+vol_categories = (
+	('dcr', 'Doctor'),
+	('hsv', 'Health Service'),
+	('elw', 'Electrical Works'),
+	('mew', 'Mechanical Works'),
+	('cvw', 'Civil Works'),
+	('plw', 'Plumbing works'),
+	('vls', 'Vehical support'),
+	('ckg', 'Cooking'),
+	('rlo', 'relief operation'),
+	('cln', 'Cleaning'),
+	('bot', 'Boat Service'),
+	('rck', 'Rock Climbing'),
+	('oth', 'Others'),
 )
 
 # Create your models here.
@@ -145,12 +159,93 @@ class Request(models.Model):
 
 	class Meta:
 		verbose_name = 'Rescue: Request'
-		verbose_name_request = 'Rescue : Resquest'
+		verbose_name_plural = 'Rescue : Resquest'
 
 	def __str__(self):
 		return self.get_district_display()+' '+self.location
 
 
+class Volunteer(models.Model):
+	division = models.CharField(
+		max_length = 10,
+		verbose_name = 'Divisions',
+		choices = divisions,
+	)
+
+	district = models.CharField(
+		max_length = 15,
+		verbose_name = 'districts',
+		choices = districts,
+	)
+
+	name = models.CharField(max_length =100),
+	phone = models.CharField(
+		max_length = 10,
+		verbose_name = 'Phone',
+		validators = [RegexValidator(regex='^[6-9]\d{9}$', 
+			message = "Please enter 10 digit mobile number", 
+			code = 'invalid_mobile')]
+	)
+
+	organization = models.CharField(
+		max_length = 250,
+		verbose_name = 'Organization',
+	)
+
+	address = models.TextField(verbose_name = 'address')
+	area = models.CharField(
+		max_length = 15,
+		verbose_name = 'Area of volunteering',
+		choices = vol_categories,
+	)
+	is_spoc=models.BooleanField(default = False, verbose_name = 'Is point of Contact')
+	joined = models.DateTimeField(auto_now_add = True)
+	is_active = models.BooleanField(default = True)
+
+	class Meta:
+		verbose_name = 'Volunteer: individual'
+		verbose_name_plural = 'Volunteer: individual'
+
+	def __str__(self):
+		return self.name
+
+class NGO(models.Model):
+	division = models.CharField(
+		max_length = 10,
+		verbose_name = 'divisions',
+		choices = divisions,
+	)
+	district = models.CharField(
+		max_length = 15, 
+		verbose_name = 'districts',
+		choices = districts,
+	)
+	organization = models.CharField(
+		max_length = 250,
+		verbose_name = 'Name of organization'
+	)
+
+	organization_type = models.CharField(max_length = 250, verbose_name = 'Type of Organization')
+	organiation_address = models.TextField(default = '', verbose_name = 'Address of organization')
+	name = models.CharField(max_length = 100, verbose_name = 'Contact person')
+	phone_regex = RegexValidator(
+		regex=r'^\+?1?\d{9, 15}$',
+		message = 'Phone number must be entered in the format:"+999999999".upto 15 digits ')
+	phone = models.CharField(validators=[phone_regex], max_length =17, blank= True)
+	description = models.TextField(verbose_name = 'About organization')
+	area = models.TextField(verbose_name = 'Area of volunteering')
+	location = models.CharField(max_length = 500, verbose_name = 'Preferred location to volunteer')
+
+	is_spoc = models.BooleanField(default = False, verbose_name = 'Is point of Contact')
+	joined = models.DateTimeField(auto_now_add= True)
+
+	class Meta:
+		verbose_name =  'Volunteer: NGO'
+		verbose_name_plural = 'Volunteer: NGOs'
+
+	def __str__(self):
+		return self.name
+	
 
 
 
