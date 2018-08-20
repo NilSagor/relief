@@ -6,13 +6,86 @@ from django.core.validtors import RegexValidator
 from django.contrib.auth.models import User
 
 
+divisions = (
+	('dha', 'Dhaka'),
+	('Cht', 'Chittagong'),
+	('raj', 'Rajshai'),
+	('bri', 'Barishal'),
+	('khu', 'Khulna'),
+	('syh', 'Sylhet'),
+	('ran', 'Rangpur'),
+	('mym', 'Mymensingh'),
+)
+
+districts = (
+		('bar', 'Barguna'),
+		('bri', 'Barisal'),
+		('bhl', 'Bhola'),
+		('jhl', 'Jhalokati'),
+		('pat', 'Patuakhali'),
+		('pir', 'Pirojpur'),
+		('ban', 'Bandarban'),
+		('bhm', 'Brahmanbaria'),
+		('chd', 'Chandpur'),
+		('cht', 'Chittagong'),
+		('com', 'Comilla'),
+		('cox', 'Cox's Bazar),
+		('fen', 'Feni'),
+		('khg', 'Khagrachhari'),
+		('lkh', 'Lakshmipur'),
+		('nkh', 'Noakhali'),
+		('rgm', 'Rangamati'),
+		('dhk', 'Dhaka'),
+		('frd', 'Faridpur'),
+		('gaz', 'Gazipur'),
+		('gop', 'Gopalganj'),
+		('kis', 'Kishoreganj'),
+		('mad', 'Madaripur'),
+		('man', 'Manikganj'),
+		('mun', 'Munshiganj'),
+		('nar', 'Narayanganj'),
+		('nas', 'Narsingdi'),
+		('raj', 'Rajbari'),
+		('sha', 'Shariatpur'),
+		('tan', 'Tangail'),
+		('bag', 'Bagerhat'),
+		('chu', 'Chuadanga'),
+		('jes', 'Jessore'),
+		('jhe', 'Jhenaidah'),
+		('khu', 'Khulna'),
+		('kus', 'Kushtai'),
+		('mag', 'Magura'),
+		('meh', 'Meherpur'),
+		('nri', 'Narail'),
+		('sat', 'Satkhira'),
+		('jam', 'Jamalpur'),
+		('mym', 'Mymensingh'),
+
+
+
+	)
+
+status_types = (
+	('new', 'New'),
+	('pro', 'In progress'),
+	('sup', 'Supplied'),
+)
+
 # Create your models here.
 class Request(models.Model):
+	
+	division = models.CharField(
+		max_length = 10,
+		verbose_name = 'Division',
+		choices = divisions,
+		)
+
 	district = models.CharField(
 		max_length = 15, 
 		verbose_name = 'District',
 		choices = districts,
 		)
+	
 	location = models.CharField( max_length = 500, verbose_name = 'Location')
 	requestee = models.CharField(max_length = 100, verbose_name = 'Requestee')
 	requestee_phone = models.CharField(max_length = 10, verbose_name = 'Requestee_phone')
@@ -76,6 +149,8 @@ class Request(models.Model):
 
 	def __str__(self):
 		return self.get_district_display()+' '+self.location
+
+
 
 
 
