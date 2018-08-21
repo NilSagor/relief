@@ -90,6 +90,16 @@ contrib_status_types = (
 	('ful', 'Fullfilled'),
 )
 
+relief_camp_status = (
+	('active', 'Activate'),
+	('closed', 'Closed'),
+)
+
+gender = (
+	(0, 'Male'),
+	(1, 'Female'),
+	(2, 'Others'),
+)
 # Create your models here.
 class Request(models.Model):
 	
@@ -347,7 +357,7 @@ class RescueCamp(models.Model):
 		blank = True, 
 		null = True, 
 		help_text = 'This camp coordinator page will be visiable only t this user')
-	map_link = models.CharField(max_length = 250, verbose_name = 'Map link' blank = True, null = True, help_text = 'Copy and paste the full google maps link')
+	map_link = models.CharField(max_length = 250, verbose_name = 'Map link', blank = True, null = True, help_text = 'Copy and paste the full google maps link')
 	latlng = models.CharField(max_length = 100, verbose_name = 'GPS Coordinates', blank = True, help_text = 'Comma separated latlng field. leave blank if you donot know it')
 	total_people = models.IntegerField(null = True, blank = True, verbose_name = 'Total number of people')
 	total_males = models.IntegerField(null = True, blank = True, verbose_name = 'Number of Males')
@@ -366,4 +376,80 @@ class RescueCamp(models.Model):
 
 	def __str__(self):
 		return self.name
-		
+
+
+class Person(models.Model):
+	name = models.CharField(max_length = 30, blank = False, null = False, verbose_name = 'Name')
+	phone = models.CharField(max_length = 11, null = True, blank = True, verbose_name = 'Mobile ')
+	age = models.IntegerField(null = True, blank = True, verbose_name = 'Age')
+	gender = models.IntegerField(choices = gender, verbose_name = 'Gender', null = True, blank = True)
+	address = models.TextField(max_length = 150, null = True, blank = True, verbose_name = 'Address')
+	district = models.CharField(max_length = 15, choices = districts, verbose_name = 'Residence District', null = True, blank = True)
+	notes = models.TextField(max_length = 500, null = True, blank = True, verbose_name = 'Notes -')
+	camp_at = models.ForeignKey(RescueCamp, on_delete = models.CASCADE, blank = False, null = False, verbose_name = 'Camp_Name')
+	added_at = models.DateTimeField(auto_now_add = True)
+
+	@property
+	def sex(self):
+		return {
+		0:'Male',
+		1: 'Female',
+		2: 'Others'
+		}.get(self.gender, 'Unknown')
+
+	@property
+	def district_name(self):
+		return {
+		'bar', 'Barguna',
+		'bri', 'Barisal',
+		'bhl', 'Bhola',
+		'jhl', 'Jhalokati',
+		'pat', 'Patuakhali',
+		'pir', 'Pirojpur',
+		'ban', 'Bandarban',
+		'bhm', 'Brahmanbaria',
+		'chd', 'Chandpur',
+		'cht', 'Chittagong',
+		'com', 'Comilla',
+		'cox', 'Cox\'s Bazar',
+		'fen', 'Feni',
+		'khg', 'Khagrachhari',
+		'lkh', 'Lakshmipur',
+		'nkh', 'Noakhali',
+		'rgm', 'Rangamati',
+		'dhk', 'Dhaka',
+		'frd', 'Faridpur',
+		'gaz', 'Gazipur',
+		'gop', 'Gopalganj',
+		'kis', 'Kishoreganj',
+		'mad', 'Madaripur',
+		'man', 'Manikganj',
+		'mun', 'Munshiganj',
+		'nar', 'Narayanganj',
+		'nas', 'Narsingdi',
+		'raj', 'Rajbari',
+		'sha', 'Shariatpur',
+		'tan', 'Tangail',
+		'bag', 'Bagerhat',
+		'chu', 'Chuadanga',
+		'jes', 'Jessore',
+		'jhe', 'Jhenaidah',
+		'khu', 'Khulna',
+		'kus', 'Kushtai',
+		'mag', 'Magura',
+		'meh', 'Meherpur',
+		'nri', 'Narail',
+		'sat', 'Satkhira',
+		'jam', 'Jamalpur',
+		'mym', 'Mymensingh',
+		}.get(self.district, 'Unknown')
+
+	class Meta:
+		verbose_name = 'Refegue: Refegue'
+		verbose_name_plural = 'Refegue: Refegue'
+
+	def __str__(self):
+		return self.name
+
+	
+
