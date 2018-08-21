@@ -85,6 +85,11 @@ vol_categories = (
 	('oth', 'Others'),
 )
 
+contrib_status_types = (
+	('new', 'New'),
+	('ful', 'Fullfilled'),
+)
+
 # Create your models here.
 class Request(models.Model):
 	
@@ -245,9 +250,120 @@ class NGO(models.Model):
 
 	def __str__(self):
 		return self.name
-	
+
+
+class Contributor(models.Model):
+	divison = models.CharField(
+		max_length = 10,
+		verbose_name = 'Divisions',
+		choices = divisions,
+	)
+
+	district = models.CharField(
+		max_length = 15,
+		verbose_name = 'Districts',
+		choices = districts,
+	)
+	name = models.CharField(max_length = 100, verbose_name = 'Name')
+	phone = models.CharField(
+		max_length = 10, 
+		verbose_name = 'Phone -', 
+		validators = [RegexValidator(regex='^[6-9]\d{9}$', 
+		message = 'Please Enter 10 digit mobile', 
+		code = 'invalid_mobile')])
+	address = models.TextField(verbose_name = 'Address')
+	commodities = models.TextField(verbose_name = 'What you can contributor. (..)')
+	status = models.CharField(
+		max_length = 10,
+		choices = contrib_status_types, 
+		default = 'new',
+	)
+
+	class Meta:
+		verbose_name = 'Contributor:Donation'
+		verbose_name_plural = 'Contributors:Donations'
+
+	def __str__(self):
+		return self.name + ' '+ self.get_district_display
+
+
+class DistrictManager(models.Model):
+	district = models.CharField(
+		max_length = 15,
+		verbose_name = 'Districts',
+		choices = districts,
+	)
+
+	name = models.CharField(max_length = 100, verbose_name = 'Name -')
+	phone = models.CharField(max_length =11, verbose_name = 'phone')
+	email = models.CharField(max_length =100, verbose_name = 'Email')
+
+	class Meta:
+		verbose_name = 'District: Manager'
+		verbose_name_plural = 'Districts: Managers'
+
+	def __str__(self):
+		return self.name + ' '+self.get_district_display
+
+class DistrictNeed(models.Model):
+	district = models.CharField(
+		max_length = 15,
+		choices = districts,
+	)
+	needs = models.TextField(verbose_name = 'Item required')
+	cnandpts = models.TextField(verbose_name = 'Contacts and collection points')
+
+	class Meta:
+		verbose_name = 'District: Need'
+		verbose_name_plural = 'Districts: Needs'
+
+	def __str__(self):
+		return self.get_district_display()
+
+class DistrictCollection(models.Model):
+	district = models.CharField(
+		max_length = 15,
+		choices = districts,
+	)
+	collection = models.TextField(verbose_name = 'Details of collected items')
+
+	class Meta:
+		verbose_name = 'District: collection'
+		verbose_name_plural = 'Districts: collections'
 
 
 
+class RescueCamp(models.Model):
+	name = models.CharField(max_length = 50, verbose_name = 'Camp-Name')
+	location = models.TextField(verbose_name = 'Address', blank= True, null = True)
+	district = models.CharField(max_length = 15, verbose_name = 'districts', choices = districts)
+	taluk = models.CharField(max_length =50, verbose_name = 'Taluk')
+	village = models.CharField(max_length = 50, verbose_name = 'village')
+	contacts = models.TextField(verbose_name = 'Phone number', blank = True, null = True)
+	facilities_available = models.TextField(blank = True, null = True, verbose_name = 'Facilities facilities_available( light, kitchen, toilets, etc.')
+	data_entry_user = models.ForeignKey(
+		User, 
+		on_delete = models.SET_NULL, 
+		blank = True, 
+		null = True, 
+		help_text = 'This camp coordinator page will be visiable only t this user')
+	map_link = models.CharField(max_length = 250, verbose_name = 'Map link' blank = True, null = True, help_text = 'Copy and paste the full google maps link')
+	latlng = models.CharField(max_length = 100, verbose_name = 'GPS Coordinates', blank = True, help_text = 'Comma separated latlng field. leave blank if you donot know it')
+	total_people = models.IntegerField(null = True, blank = True, verbose_name = 'Total number of people')
+	total_males = models.IntegerField(null = True, blank = True, verbose_name = 'Number of Males')
+	total_females = models.IntegerField(null = True, blank = True, verbose_name = 'Number of females')
+	total_infants = models.IntegerField(null = True, blank = True, verbose_name = 'Number of infants(<2y)')
 
+	food_req = models.TextField(blank = True, null = True, verbose_name = 'Food')
+	clothing_req = models.TextField(blank = True, null = True, verbose_name = 'Cloth')
+	sanity_req = models.TextField(blank = True, null = True, verbose_name = 'Sanity')
+	medical_req = models.TextField(blank = True, null = True, verbose_name = 'Medicine')
+	other_req = models.CharField(max_length = 10, default = 'active', choices = relief_camp_status)
 
+	class Meta:
+		verbose_name = 'Relief: Camp'
+		verbose_name_plural = 'Relief: Camps'
+
+	def __str__(self):
+		return self.name
+		
