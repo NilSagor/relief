@@ -100,6 +100,11 @@ gender = (
 	(1, 'Female'),
 	(2, 'Others'),
 )
+
+announcement_priorities = (
+	('H', 'High'),
+	('M', 'Medium'),
+	('L', 'Low'))
 # Create your models here.
 class Request(models.Model):
 	
@@ -472,4 +477,16 @@ class Announcements(models.Model):
 		return self.description[:100]
 
 class ReliefCampData(models.Model):
+	created_at = models.DateTimeField(auto_now_add = True)
+	description = models.TextField(blank = True, verbose_name = 'Details of requirements')
+	district = models.CharField(max_length = 15, choices = districts, verbose_name = 'Districts', null = True, blank = True)
+	tag = models.CharField(max_length = 255, null = True, blank = True)
+	phone = models.CharField(max_length =11, null = True, blank = True, verbose_name = 'Phone')
+
+	class Meta:
+		verbose_name = 'Relief: Camp Data'
+		verbose_name_plural = 'Relief: Camp Datas'
+
+	def __str__(self):
+		return self.description[:100]
 
