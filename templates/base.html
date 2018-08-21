@@ -1,0 +1,23 @@
+{% spaceless %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	{# <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png"> #}
+	<link rel="stylesheet" href="{% static 'css/apps.css' %}">
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pelata">
+
+	{% block stylesheet %}{% endblock stylesheet %}
+
+</head>
+<body>
+	
+
+	{% block javascript %}{% endblock javascript %}
+</body>
+</html>
+{% endspaceless %}
