@@ -451,5 +451,25 @@ class Person(models.Model):
 	def __str__(self):
 		return self.name
 
-	
+
+def upload_to(instance, filename):
+	ext = filename.split('.')[-1]
+	filename = '%s.%s'%(uuid.uuid4(), ext)
+	return os.path.join('media/', filename)
+
+class Announcements(models.Model):
+	dateadded = models.DateTimeField(auto_now_add = True)
+	priority = models.CharField(max_length = 20, choices = announcement_priorities, verbose_name = 'Priority', default = 'L')
+	image = models.ImageField(blank = True, upload_to = upload_to) 
+	upload = models.FileField(blank = True, upload_to = upload_to)
+	is_pinned = models.BooleanField(default = False)
+
+	class Meta:
+		verbose_name = 'Announcement: News'
+		verbose_name_plural = 'Announcements: News'
+
+	def __str__(self):
+		return self.description[:100]
+
+class ReliefCampData(models.Model):
 
