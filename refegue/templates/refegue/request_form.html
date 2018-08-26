@@ -92,8 +92,78 @@ catch(err){
 }
 
 window.addEventListener('load', function(){
-	$()
+	$('#id_district').selectize();
+	$('#id_requestee_phone').attr('type', 'number');
+	var gpsField=document.getElementById('id_latlng')
+	var gpsAccuracyField = document.getElementById('id_latlng_accuracy');
+
+	gpsField.readOnly = true;
+	gpsAccuracyField.readOnly = true;
+
+	var options = {
+		enableHighAccuracy:true
+	};
+	var success = function(pos){
+		var crd = pos.coords;
+			gpsField.value = crd.latitude +","+crd.longitude;
+			gpsAccuracyField.value = crd.accuracy+'Meters';
+			$.get('https://nominatim.openstreetmap.org/reverse?format=json2&lat='+crd.latitude+'&lon='+crd.longitude+'&zoom=18&addressdetails=1')
+			.done(function(response){
+				var inputElem = $('<input class="form-control" id="id_latlng_display" readonly="true" value="'+response.display_name+'"</input>');
+				$(gpsField.before(inputElem);
+					$(gpsField).hide();
+					console.log(response.display_name);
+			})
+				.fail(function(err){
+					console.log(err);
+				})
+	}
+	var error=function(err){
+		console.warn('ERROR(${err.code}):${err.message}');
+		showLocationPickerForm();
+	}
+	$('#instructionModal').on('hidden.bs.modal', function(e){
+		navigator.geolocation.getCurrentPosition(success, error, options);
+	})
+
+	try{
+		navigator.permissions.query({'name':geolocation}).then(
+			function(result){
+				switch(result.state){
+					case 'prompt':$('#instructionModal').modal('show'); break;
+					case 'granted':navigator.geolocation.getCurrentPosition(success, error, options); break;
+				}
+			})
+	} 
+	catch(err){
+		//capture that don't have navigation or navigator.permissions
+		$('#instructionModal').modal('show');
+	}
+});
+
+function showLocationPickerForm(){
+	$('#placepicker_form').show();
+	$('#location-manually').hide();
+}
+$('#location-manually').on('click', function(event){
+	event.preventDefault();
+	showLocationPickerForm();
 })
+
+$('#id_is_request_for_others').on('change', function(){
+	if($(this).is(".checked")){
+		$('@pac-input').attr('required', 'required');
+		showLocationPickerForm();
+	}else{
+		$('#pac-input').removeAttr('required');
+	}
+});
+
+
+
 </script>
+
+<script src="{% static 'js/placepicker.js' %}" async defer=""></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=kjasdjkasdjkjsdkfjadkjjdcjka"  async defer=""></script>
 
 {% endblock content %}
