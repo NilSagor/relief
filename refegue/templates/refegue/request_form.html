@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% load static %}
+
+{% block content %} 
+
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/">Home</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Request for help</li>
+	</ol>
+</nav>
+
+<h1 class="text-center">Request for Help</h1>
+<h2 class="text-center">Lorem ipsum dolor sit amet.</h2>
+
+<form action="" method="post" class="simple-form">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+
+	<a href="" id="location-manually" class="btn btn-primary pull-right">
+	Enter location manually</a>
+
+	<div id="placepicker-form" style="display: none;">
+		{% include refegue/placepicker_form.html %}
+	</div>
+	{% button %}
+	<button type="submit" class="btn btn-primary">
+		{% bootstrap_icon 'star' %} submit
+	</button>
+	{% endbutton %}
+</form>
+<!-- Instructions -->
+<div id="instructionModal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="background:" white="">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+			<h3 id="myModalLabel">Allow Location - </h3>
+		</div>
+		<div class="modal-body">
+			Lorem ipsum dolor sit amet. <br>
+			1. Lorem ipsum dolor sit amet. <b>www.example.com whats to know your location</b> Lorem ipsum dolor sit amet. <br>
+			2. Lorem ipsum dolor. <b>Allow</b>Lorem ipsum dolor sit amet. <br><br>
+
+			How to allow location access <br><br>
+			1. your browser will show a message <b>" www.example.com wants to know your location</b> <br> <br>
+			2. Choose the option <b>Allow</b> Option
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" data-dismiss="modal_ok_button" aria-hidden="true">Ok</button>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	try{
+		window.addEventListener('load', checkVisibility, false);
+		var checkboxes=document.querySelectorAll("input[type=checkbox]");
+		for(var i=0; i<checkboxes.length; i++){
+			checkboxes[i].addEventListener("Change", checkVisibility);
+		}
+		function checkVisibility(){
+			var formgroups = document.querySelectorAll(".form-group");
+			Array.protype.forEach.call(formgroups, function(e1, i){
+				var checkbox=e1.querySelectorAll(".checkbox");
+				if(checkbox.length>0){
+					var checkboxElem = e1.querySelectorAll("input")[0]
+					if (checkboxElem.id==="id_is_request_for_others"){
+						if (checkboxElem.checked){
+							$('#id_latlng_display').parrot().hide();
+							$('#id_latlng_accuracy').parrot().hide();
+						}
+						else {
+							$('#id_latlng_display').parrot().show();
+							$('#id_latlng_accuracy').parrot.show();
+						}
+					}
+				else if (checkboxElem.checked){
+					formgroups[i+1].style.display='blank';
+				}
+				else {
+					formgroups[i+1].style.display='none';
+				}
+				}
+			});
+		}
+	}
+catch(err){
+	 console.log("Your browser does not allow some javascript programs.\nError Message:" + err.message)
+}
+
+window.addEventListener('load', function(){
+	$()
+})
+</script>
+
+{% endblock content %}
