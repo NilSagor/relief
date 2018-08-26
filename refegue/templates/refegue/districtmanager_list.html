@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/">Home</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Contact Info</li>
+	</ol>
+</nav>
+
+<h1 class="text-center">Contact Info</h1>
+<h2 class="text-center">Lorem ipsum dolor sit amet.</h2>
+
+<p class="text-center">
+	Volunteers are available across the country. Contact the <u>District level point of Contacts</u> for any help <br>
+</p>
+
+<form action="" id="find-contact-info:get">
+	{% bootstrap_form filter.form bound_css_class= Fasle %}
+
+</form>
+<div class="table-responsive">
+	<table class="table">
+		<tr>
+			<th>Name - </th>
+			<th>Phone- </th>
+			<th>Other contacts</th>
+		</tr>
+		{% for req in filter.qs %}
+		<tr>
+			<td>{{ req.name }}</td>
+			<td><a href="tel:{{ req.phone }}">{{ req.phone }}</a></td>	
+			<td>{{ req.email }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+
+<script>
+	window.addEventListener('load', function(){
+		$("#id_district").change(()=>{
+			$("#find-contact-form").submit();
+		})
+		$('#id_district').selectize();
+	});
+</script>
+
+{% endblock content %}

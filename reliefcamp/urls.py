@@ -14,14 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, reverse
 
 from django.views.generic import TemplateView
 
 from refegue import views
 
 urlpatterns = [
-	path('request/', views.CreateRequest.as_view(), name = 'requestview'),
+	
 	path('', views.HomePageView.as_view(), name = 'home'),
+	path('request/', views.CreateRequest.as_view(), name = 'requestview'),
+	path('req_success/', views.ReqSuccess.as_view(), name = 'req_successview'),
     path('admin/', admin.site.urls),
 ]

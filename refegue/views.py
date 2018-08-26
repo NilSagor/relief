@@ -2,15 +2,19 @@ from django.shortcuts import render
 
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
+from django.http import HttpResponseRedirect
+
+import django_filters
+
 from django import forms
-from .models import Request
+from .models import Request, DistrictManager
 from refegue.sms_handler import send_confirmation_sms
 
 # Create your views here.
 
 
 class CustomForm(forms.ModelForm):
-	def __init__(self, *args, *kwargs):
+	def __init__(self, *args, **kwargs):
 		super(CustomForm, self).__init__(*args, *kwargs)
 
 PER_PAGE = 500
@@ -57,3 +61,10 @@ class CreateRequest(CreateView):
 
 class HomePageView(TemplateView):
 	template_name = 'home.html'
+
+class ReqSuccess(TemplateView):
+	template_name = 'refegue/req_success.html'
+
+def districtmanager_list(request):
+	filter = DistrictManagerFilter(request.GET, queryset=DistrictManager.objects.all())
+	return render(request, 'refegue/districtmanager_list.html', {'filter': filter})

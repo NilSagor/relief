@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load bootstrap3 %}
+
 {% block content %}
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
@@ -15,6 +17,84 @@
 				For effective collaboration and communication among authoirities, volunteers and public <strong><span class="notranslate">ুিকব কবতৃকতবকৃত বতক তৃকিতক ৃকতকক</span></strong><br>
 				<a href="{% static 'img/msg_pm.jpg' %}" class="btn btn-info btn-msg">Message from Prime Minister</a></i>
 				<a href="http:donation.com/donation" class="btn btn-info btn-msg">Donate to Prime Ministe Relief fund</a>
+		</p>
+		<a href="/request/" class="home-button card" role="button">
+			{% bootstrap_icon 'grain' %}
+			<span class="text">
+				Request <br>For help <br>
+				<span class="ml small notranslate">Lorem ipsum dolor sit amet.</span>
+			</span>
+		</a>
+
+		<a href="/relief_camp/" class="home-button card" role="button">
+			{% bootstrap_icon apple %}
+			<span class="text">
+				Relief Camps <br>
+				<span class="ml small notranslate">Lorem ipsum dolor sit amet.</span>
+			</span>
+		</a>
+
+		<a href="/req_contrib/" class="home-button card" role="button">
+			{% bootstrap_icon "apple" %}
+			<span class="text">
+				To Contribute <br>
+				<span class="ml small notranslate">Lorem ipsum dolor sit amet.</span>
+			</span>
+		</a>
+
+		<a href="/district_needs/" class="home-button card" role="button">
+			{% bootstrap_icon "map-maker" %}
+			<span class="text">
+				District &amp; COLLECTION CENTERS <br>
+				<span class="ml small notranslate">Lorem ipsum dolor sit amet.</span>
+			</span>
+		</a>
+
+		<a href="/ngo-volunteer/" class="home-button card" role="button">
+			{% bootstrap_icon "user" %}
+			<span class="text">
+				Volunteer &amp; NGO/Company <br>
+				<span class="ml small notranslate">Lorem ipsum dolor sit amet.</span>
+			</span>
+		</a>
+
+		<a href="contactus/" class="home-button card" role="button">
+			{% bootstrap_icon 'phone' %}
+			<span class="text">
+				Contact <br> Info <br>
+				<span class="ml small notranslate">Lorem ipsum dolor sit amet.</span>
+			</span>
+		</a>
+		
+		<a href="/requests/?district=" class="home-button card" role="button">
+			{% bootstrap_icon 'list' %}
+			<span class="text">
+				Rgistered Request <br>
+				<span class="ml small notranslate">Lorem ipsum dolor sit amet.</span>
+			</span>
+		</a>
+		<a href="/announcement" class="home-button card" role="button">
+			{% bootstrap_icon 'list' %}
+			<span class="text">
+				Announancements <br>
+				<span class="ml small notranslate">Lorem ipsum dolor sit amet.</span>
+			</span>
+		</a>
+
+		<a href="/privatecc" class="home-button card" role="button">
+			{% bootstrap_icon 'briefcase' %}
+			<span class="text">
+				Private Relief & <br> Collection Centers <br>
+				<span class="ml small notranslate">Lorem ipsum dolor sit amet.</span>
+			</span>
+		</a>
+
+		<p class="home-info">
+			Contact Control Room or Disaster Management Cell or District Administration for anu support <br>Volunteers may contact District Project Managers for support related to volunteering and contributions <br><br>
+			<span class="notranslate">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis maxime consectetur voluptates harum quod itaque.</span>
+		</p>
+		<p class="slack">
+			Our Collaboration Platform(slack) <a href="http://bit.ly/github/">Join</a>
 		</p>
 	</div>
 
