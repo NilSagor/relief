@@ -21,6 +21,7 @@ from django.views.generic import TemplateView
 from refegue import views
 
 urlpatterns = [
+	path('request/', views.CreateRequest.as_view(), name = 'requestview'),
 	path('', views.HomePageView.as_view(), name = 'home'),
     path('admin/', admin.site.urls),
 ]
