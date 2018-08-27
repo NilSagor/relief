@@ -58,12 +58,31 @@ class CreateRequest(CreateView):
 		sms_queue.enqueue(send_confirmation_sms, self.object.requestee_phone)
 		return HttpResponseRedirect(self.get_success_url())
 
+class RegisterVolunteer(CreateViewte):
+	model = Volunteer
+	fields = ['name', 'district', 'phone', 'organization', 'area', 'address'] 
+	success_url = '/reg_success/'
+def volunteerdata(request):
+	filter = VolunteerFilter(request.GET, queryset = Volunteer.objects.all())
+	req_data = filter.qs.order_by('-id')
+	paginator = Paginator(req_data, PER_PAGE)
+	page = request.GET.get('page')
+	req_data = paginator.get_page(page)
+	req_data.min_page = req_data.number - PAGE_LEFT
+	req_data.max_page = req_data.number + PAGE_RIGHT
+	req_data.lim_page = PAGE_INTERMEDIATE
+	return render(request, 'refegue/volunteerview.html', {'filter': filter, 'data': req_data })
 
 class HomePageView(TemplateView):
 	template_name = 'home.html'
 
 class ReqSuccess(TemplateView):
 	template_name = 'refegue/req_success.html'
+
+class RegSuccess(TemplateView):
+	template_name = 'refegue/reg_success.html'
+
+
 
 def districtmanager_list(request):
 	filter = DistrictManagerFilter(request.GET, queryset=DistrictManager.objects.all())
