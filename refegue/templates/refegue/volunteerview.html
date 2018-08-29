@@ -74,5 +74,91 @@
 
     <h1 class="text-center">View Volunteers</h1>
     {# <h2 class="text-center">Lorem ipsum dolor sit amet.</h2>}
-    
+    <form action="" method="get">
+        {% bootstrap_form filter.form bound_css_class=False %}
+        <input type="submit" value="view requests" class="btn btn-primary">        
+    </form>
+    <div id="requests-table" class="table-responsive">
+        <table id="req-table" class="table">
+            <thead>
+                <tr>
+                    <th>District - </th>
+                    <th>Name - </th>
+                    {% if user.is_authenticated %}
+                        <th>Location</th>
+                        <th>Organization</th>
+                    {% endif %}
+                    <th>Area - </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in data %}
+                    <tr>
+                        <td>{{ req.get_district_display }}</td>
+                        <td>{{ req.name }}</td>
+                        {% if user.is_authenticated %}
+                            <td>{{ req.address }}</td>  
+                            <td>{{ req.organization }}</td>
+                        {% endif %}
+                        <td>{{ req.get_area_display }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+            <span class="step-links">
+                {% if data.has_previous %}
+                    <a href="?page=1&district={{request.GET.district}}&area={{request.GET.area}}" class="">&laquo; first</a>
+                   <a href="?page={{ data.previous_page_number }}={{request.GET.district}}&area={{request.GET.area}}" class="">previous</a>
+                   
+                {% endif %}
+
+                {% for i in data.paginator.page_range %}
+                    {% if data.number == i %}
+                        <a class="acitve"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                    {% elif i data.min_page and i <data.max_page or i|divisibleby: data.lim_page %}
+                        <a href="?page={{i}}&district={{ request.GET.district}}&area={{ request.GET.area}}" class="">{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if data.has_next %}
+                    <a href="?page={{ data.next_page_number }}&district={{ request.GET.district}}&area={{ request.GET.area}}">next</a>
+                    <a href="?page={{ data.paginator.num_pages}}&district={{request.GET.district}}&area={{request.GET.area}}">last &raquo;</a>
+                {% endif %}
+                    
+            </span>
+                
+               
+        </div>
+    </div>
+
+    <script>
+        window.onload=function(){
+            $("input.search").keyup(search);
+        }
+        function search(){
+            $("#req-table").find("tr").each(function(i, e1){
+                // skip header row
+                if (i==0) return
+                    e1 = $(e1)
+                    var tds = e1.find("td")
+                    var loc = tds.eq(1).text().toLowerCase()
+                    var requestee = tds.eq(2).text().toLowerCase()
+                    var phone = tds.eq(3).text()
+                    var locKey = $("#search-loc").val().toLowerCase()
+                    var reqKey = $("#search-requestee").val().toLowerCase()
+                    var phoneKey = $("#search-phone").val()
+
+                    if (loc.includes(locKey) &&
+                        requestee.includes(reqKey) &&
+                        phone.includes(phoneKey))
+                    {
+                        e1.show()
+                    }else {
+                        e1.hide()
+                    }
+            })
+        }
+    </script>
+
 {% endblock content %}
