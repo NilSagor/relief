@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 import django_filters
 
 from django import forms
-from .models import Request, DistrictManager
+from .models import Request, DistrictManager, Volunteer, NGO, PrivateRescueCamp
 from refegue.sms_handler import send_confirmation_sms
 
 # Create your views here.
@@ -33,7 +33,7 @@ class CreateRequest(CreateView):
 		'is_request_for_others',
 		'latlng',
 		'latlng_accuracy',
-		'needrescue'
+		'needrescue',
 		'detailrescue',
 		'needwater',
 		'detailrescue',
@@ -45,8 +45,8 @@ class CreateRequest(CreateView):
 		'detailcloth',
 		'needmed',
 		'detailmed',
-		'needkit_util',
-		'detailkit_util',
+		'needkit_utils',
+		'detailkit_utils',
 		'needtoilet',
 		'detailtoilet',
 		'needothers',
@@ -58,10 +58,18 @@ class CreateRequest(CreateView):
 		sms_queue.enqueue(send_confirmation_sms, self.object.requestee_phone)
 		return HttpResponseRedirect(self.get_success_url())
 
-class RegisterVolunteer(CreateViewte):
+class RegisterVolunteer(CreateView):
 	model = Volunteer
-	fields = ['name', 'district', 'phone', 'organization', 'area', 'address'] 
+	fields = [
+		'name', 
+		'district', 
+		'phone', 
+		'organization', 
+		'area', 
+		'address'
+		] 
 	success_url = '/reg_success/'
+
 def volunteerdata(request):
 	filter = VolunteerFilter(request.GET, queryset = Volunteer.objects.all())
 	req_data = filter.qs.order_by('-id')
@@ -72,6 +80,58 @@ def volunteerdata(request):
 	req_data.max_page = req_data.number + PAGE_RIGHT
 	req_data.lim_page = PAGE_INTERMEDIATE
 	return render(request, 'refegue/volunteerview.html', {'filter': filter, 'data': req_data })
+
+class RegisterNGO(CreateView):
+	model = NGO
+	fields = [
+		'organization',
+		'organization_type',
+		'organization_address',
+		'district',
+		'name',
+		'phone',
+		'area',
+		'description',
+		'website_url',
+		'location',
+	]
+	success_url = '/reg_success'
+
+class RegisterPrivateReliefCampForm(forms.ModelForm):
+	class Meta:
+		model = PrivateRescueCamp
+		fields = [
+			'name',
+			'location',
+			'district',
+			'lsg_name',
+			'ward_name',
+			'contacts',
+			'facilities_available',
+			'map_link',
+			'latlng',
+			'total_people',
+			'total_males',
+			'total_females',
+			'total_infants',
+			'food_req',
+			'clothing_req',
+			'sanitry_req',
+			'medical_req',
+			'other_req'
+		]
+		widgets = {
+			'lsg_name': forms.Select(),
+			'ward_name': forms.Select()
+		}
+
+class RegisterPrivateReliefcamp(CreateView):
+	model = PrivateRescueCamp
+	success_url = '/pcamp'
+	form_class = RegisterPrivateReliefCampForm
+
+def privatecc(request):
+	return render(request, 'privatecc.html')
 
 class HomePageView(TemplateView):
 	template_name = 'home.html'

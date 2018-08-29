@@ -131,11 +131,11 @@ class Request(models.Model):
 	is_request_for_others = models.BooleanField(verbose_name = 'Requesting for others-', default = False, help_text = 'If it is enabled, no need to consider lat and lng')
 
 	needwater = models.BooleanField(verbose_name = 'Water')
-	needfooed = models.BooleanField(verbose_name = 'Food')
+	needfood = models.BooleanField(verbose_name = 'Food')
 	needcloth = models.BooleanField(verbose_name = 'Cloth')
 	needmed = models.BooleanField(verbose_name = 'Medicine')
 	needtoilet = models.BooleanField(verbose_name = 'Toilet')
-	needkit_util = models.BooleanField(verbose_name = 'Kitchen Utilities')
+	needkit_utils = models.BooleanField(verbose_name = 'Kitchen Utilities')
 	needrescue = models.BooleanField(verbose_name = 'Rescue')
 
 	detailwater = models.CharField(max_length = 250, verbose_name = 'Detail for required water', blank = True)
@@ -143,7 +143,7 @@ class Request(models.Model):
 	detailcloth = models.CharField(max_length = 250, verbose_name = 'Detail for requird cloth', blank = True)
 	detailmed = models.CharField(max_length = 250, verbose_name = 'Detail for required medicine', blank = True)
 	detailtoilet = models.CharField(max_length = 250, verbose_name = 'Detail for required toilet', blank = True)
-	detailkt_utils = models.CharField(max_length = 250, verbose_name = 'Detail for required kitchen utilities', blank = True)
+	detailkit_utils = models.CharField(max_length = 250, verbose_name = 'Detail for required kitchen utilities', blank = True)
 	detailrescue = models.CharField(max_length = 250, verbose_name = 'Detail for required rescue', blank = True)
 
 	needothers = models.CharField(max_length = 500, verbose_name = 'required others', blank = True)
@@ -268,7 +268,7 @@ class NGO(models.Model):
 
 
 class Contributor(models.Model):
-	divison = models.CharField(
+	division = models.CharField(
 		max_length = 10,
 		verbose_name = 'Divisions',
 		choices = divisions,
@@ -364,6 +364,7 @@ class RescueCamp(models.Model):
 		help_text = 'This camp coordinator page will be visiable only t this user')
 	map_link = models.CharField(max_length = 250, verbose_name = 'Map link', blank = True, null = True, help_text = 'Copy and paste the full google maps link')
 	latlng = models.CharField(max_length = 100, verbose_name = 'GPS Coordinates', blank = True, help_text = 'Comma separated latlng field. leave blank if you donot know it')
+	
 	total_people = models.IntegerField(null = True, blank = True, verbose_name = 'Total number of people')
 	total_males = models.IntegerField(null = True, blank = True, verbose_name = 'Number of Males')
 	total_females = models.IntegerField(null = True, blank = True, verbose_name = 'Number of females')
@@ -371,7 +372,7 @@ class RescueCamp(models.Model):
 
 	food_req = models.TextField(blank = True, null = True, verbose_name = 'Food')
 	clothing_req = models.TextField(blank = True, null = True, verbose_name = 'Cloth')
-	sanity_req = models.TextField(blank = True, null = True, verbose_name = 'Sanity')
+	sanitry_req = models.TextField(blank = True, null = True, verbose_name = 'Sanity')
 	medical_req = models.TextField(blank = True, null = True, verbose_name = 'Medicine')
 	other_req = models.CharField(max_length = 10, default = 'active', choices = relief_camp_status)
 
@@ -387,9 +388,19 @@ class Person(models.Model):
 	name = models.CharField(max_length = 30, blank = False, null = False, verbose_name = 'Name')
 	phone = models.CharField(max_length = 11, null = True, blank = True, verbose_name = 'Mobile ')
 	age = models.IntegerField(null = True, blank = True, verbose_name = 'Age')
-	gender = models.IntegerField(choices = gender, verbose_name = 'Gender', null = True, blank = True)
+	gender = models.IntegerField(
+		choices = gender, 
+		verbose_name = 'Gender', 
+		null = True, 
+		blank = True
+		)
 	address = models.TextField(max_length = 150, null = True, blank = True, verbose_name = 'Address')
-	district = models.CharField(max_length = 15, choices = districts, verbose_name = 'Residence District', null = True, blank = True)
+	district = models.CharField(
+		max_length = 15, 
+		choices = districts, 
+		verbose_name = 'Residence District', 
+		null = True, blank = True
+		)
 	notes = models.TextField(max_length = 500, null = True, blank = True, verbose_name = 'Notes -')
 	camp_at = models.ForeignKey(RescueCamp, on_delete = models.CASCADE, blank = False, null = False, verbose_name = 'Camp_Name')
 	added_at = models.DateTimeField(auto_now_add = True)
@@ -489,4 +500,43 @@ class ReliefCampData(models.Model):
 
 	def __str__(self):
 		return self.description[:100]
+
+class PrivateRescueCamp(models.Model):
+	name = models.CharField(max_length = 50, verbose_name = 'Camp Name')
+	location = models.TextField(blank = True, null = True, verbose_name = 'location')
+	district = models.CharField(
+		max_length = 15,
+		choices = districts
+		)
+	lsg_name = models.CharField(max_length = 150, null = True, blank = True, verbose_name = 'lsg name')
+	ward_name = models.CharField(max_length = 150, null = True, blank = True, verbose_name = 'Ward')
+	contacts = models.TextField( verbose_name = 'Phone number', blank = True, null = True)
+	facilities_available = models.TextField(blank = True, null = True, verbose_name = 'Facilities Available')
+	map_link = models.CharField(max_length =250,  verbose_name = 'Map link', blank = True, null=True, help_text = 'Copy and paste the full link')
+	latlng = models.CharField(max_length = 100, verbose_name = 'GPS Coordinates', blank = True, help_text = 'Comma separated latlng field')
+
+	total_people = models.IntegerField(null = True, blank = True, verbose_name = 'Total number of people')
+	total_males = models.IntegerField(null = True, blank = True, verbose_name = 'Total number of Males')
+	total_females = models.IntegerField(null = True, blank = True, verbose_name = 'Total number of Females')
+	total_infants = models.IntegerField(null = True, blank = True, verbose_name = 'Total number of infants <2y')
+
+	food_req = models.TextField(blank = True, null = True, verbose_name = 'Food requird')
+	clothing_req = models.TextField(blank = True, null = True, verbose_name = 'Cloth requird')
+	sanitry_req = models.TextField(blank = True, null = True, verbose_name = 'sanitary required')
+	medical_req = models.TextField(blank = True, null = True, verbose_name = 'medicine required')
+	other_req = models.TextField(blank = True, null = True, verbose_name = 'Others required')
+
+	status = models.CharField(
+		max_length = 10,
+		choices = relief_camp_status,
+		default = 'active'
+		)
+	class Meta:
+		verbose_name = 'Private Relief: Camp'
+		verbose_name_plural = 'Private Relief Camp: Camps'
+
+	def __str__(self):
+		return self.name
+
+
 
