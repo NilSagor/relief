@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, reverse
-
+from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from refegue import views
@@ -26,5 +26,8 @@ urlpatterns = [
 	path('', views.HomePageView.as_view(), name = 'home'),
 	path('request/', views.CreateRequest.as_view(), name = 'requestview'),
 	path('req_success/', views.ReqSuccess.as_view(), name = 'req_successview'),
+    path('collection_center/', views.CollectionCenterView.as_view(), name = 'collection_centers_view'),
+    path('collection_centers/', TemplateView.as_view(template_name = 'refegue/collectioncenter_state_select.html'), name = 'collection_centers_district_select'),
+    url(r'collection_centers/(?P<location>\w+)/$', views.CollectionCenterListView.as_view(), name = 'collection_centers_list'),
     path('admin/', admin.site.urls),
 ]

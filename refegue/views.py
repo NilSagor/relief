@@ -3,11 +3,14 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect
+from django.views.generic.list import ListView
 
 import django_filters
 
+from collections import OrderedDict
+
 from django import forms
-from .models import Request, DistrictManager, Volunteer, NGO, PrivateRescueCamp
+from .models import Request, DistrictManager, Volunteer, NGO, PrivateRescueCamp, CollectionCenter
 from refegue.sms_handler import send_confirmation_sms
 
 # Create your views here.
@@ -17,7 +20,7 @@ class CustomForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(CustomForm, self).__init__(*args, *kwargs)
 
-PER_PAGE = 500
+PER_PAGE = 100
 PAGE_LEFT = 5
 PAGE_RIGHT = 5
 PAGE_INTERMEDIATE = '50'
@@ -55,7 +58,9 @@ class CreateRequest(CreateView):
 
 	def form_valid(self, form):
 		self.object = form.save()
-		sms_queue.enqueue(send_confirmation_sms, self.object.requestee_phone)
+		sms_queue.enqueue(
+			send_confirmation_sms, self.object.requestee_phone
+		)
 		return HttpResponseRedirect(self.get_success_url())
 
 class RegisterVolunteer(CreateView):
@@ -148,7 +153,7 @@ def districtmanager_list(request):
 	filter = DistrictManagerFilter(request.GET, queryset=DistrictManager.objects.all())
 	return render(request, 'refegue/districtmanager_list.html', {'filter': filter})
 
-class CollectionCenter(django_filters.FilterSet):
+class CollectionCenterFilter(django_filters.FilterSet):
 	lsg_name = django_filters.ChoiceFilter()
 	ward_name = django_filters.ChoiceFilter()
 
@@ -157,13 +162,13 @@ class CollectionCenter(django_filters.FilterSet):
 		fields = OrderedDict()
 		fields['name']=['icontains']
 		fields['address']=['icontains']
-		fields['contacts']=['icontacts']
+		fields['contacts']=['icontains']
 		fields['district']=['exact']
 		fields['lsg_name']=['exact']
 		fields['ward_name']=['exact']
 
 	def __init__(self, *args, **kwargs):
-		super(CollectionCenter, self).__init__(*args, **kwargs)
+		super(CollectionCenterFilter, self).__init__(*args, **kwargs)
 		if self.data=={}:
 			self.queryset=self.queryset.none()
 
@@ -173,16 +178,18 @@ class CollectionCenterListView(ListView):
 	ordering = ['-id']
 
 	def get_context_data(self, **kwargs):
+
 		location = self.kwargs['location']
 		inside_kerala = True if location == 'inside_kerala' else False
 		context = super().get_context_data(**kwargs)
-		context['inside_kerala']=inside_kerala
-		context['filter']=CollectionCenterFilter(
+		context['inside_kerala'] = inside_kerala
+		context['filter']= CollectionCenterFilter(
 			self.request.GET, 
-			queryset=CollectionCenter.objects.filter(is_inside_kerala=inside_kerala).order_by('-id')
+			queryset = CollectionCenter.objects.filter(is_inside_kerala = inside_kerala).order_by('-id')
 			)
 		
 		return context
+
 class CollectionCenterForm(forms.ModelForm):
 	class Meta:
 		model = CollectionCenter
@@ -190,18 +197,18 @@ class CollectionCenterForm(forms.ModelForm):
 		'name',
 		'address',
 		'contacts',
-		'types_of_materials_collecting',
+		'type_of_materials_collecting',
 		'is_inside_kerala',
 		'district',
 		'lsg_name',
 		'ward_name',
 		'city',
-		'map_link'
+		'map_link',
 		]
 
 		widgets = {
 			'lsg_name': forms.Select(),
-			'ward_name': forms.Select()
+			'ward_name': forms.Select(),
 		}
 
 class CollectionCenterView(CreateView):

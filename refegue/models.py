@@ -1,5 +1,6 @@
 import os
 import uuid
+from enum import Enum 
 
 from django.db import models
 from django.core.validators import RegexValidator
@@ -105,6 +106,13 @@ announcement_priorities = (
 	('H', 'High'),
 	('M', 'Medium'),
 	('L', 'Low'))
+
+class LSGTypes(Enum):	
+	CORPORATION = 0
+	MUNICIPALITY = 1
+	GRAM_PANCHAYATH = 2
+
+
 # Create your models here.
 class Request(models.Model):
 	
@@ -538,5 +546,44 @@ class PrivateRescueCamp(models.Model):
 	def __str__(self):
 		return self.name
 
+class CollectionCenter(models.Model):
+	lsg_types = [
+		(LSGTypes.CORPORATION.value, 'Corporation'),
+		(LSGTypes.MUNICIPALITY.value, 'Municipality'),
+		(LSGTypes.GRAM_PANCHAYATH.value, 'Gram Panchayath')
+	]
 
+	name = models.CharField(max_length = 100, blank = False, null = False, verbose_name = 'Name')
+	address = models.TextField(verbose_name = 'Address')
+	contacts = models.CharField(max_length = 250, null = True, blank = True, verbose_name = 'Contacts')
+	type_of_materials_collecting = models.TextField(
+		verbose_name = 'Type of materials collecting',
+		null = True, blank = True
+	)
+	district = models.CharField(
+		max_length = 15,
+		choices = districts,
+		null =True,
+		blank = True,
+		verbose_name = 'center District'
+	)
+	lsg_type = models.SmallIntegerField(
+		choices = lsg_types,
+		verbose_name = 'LSG Type',
+		null = True,
+		blank = True
+	)
+	lsg_name = models.CharField(max_length = 150, null = True, blank = True, verbose_name = 'LSG name')
+	ward_name = models.CharField(max_length = 150, null = True, blank = True, verbose_name = 'Ward')
+	is_inside_kerala = models.BooleanField(default = True, verbose_name= 'center inside Kerala')
+	city= models.CharField(null = True, blank = True, max_length = 150, verbose_name = 'City')
+	added_at = models.DateTimeField(auto_now_add = True)
+	map_link = models.TextField(verbose_name = 'Map Link', blank = True, null = True, help_text = 'Copy and paste the full link')
+
+
+	def __str__(self):
+		return self.name
+
+	def get_absolute_url(self):
+		return reverse('collection_centers_list')
 
