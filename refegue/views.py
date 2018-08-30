@@ -147,3 +147,65 @@ class RegSuccess(TemplateView):
 def districtmanager_list(request):
 	filter = DistrictManagerFilter(request.GET, queryset=DistrictManager.objects.all())
 	return render(request, 'refegue/districtmanager_list.html', {'filter': filter})
+
+class CollectionCenter(django_filters.FilterSet):
+	lsg_name = django_filters.ChoiceFilter()
+	ward_name = django_filters.ChoiceFilter()
+
+	class Meta:
+		model = CollectionCenter
+		fields = OrderedDict()
+		fields['name']=['icontains']
+		fields['address']=['icontains']
+		fields['contacts']=['icontacts']
+		fields['district']=['exact']
+		fields['lsg_name']=['exact']
+		fields['ward_name']=['exact']
+
+	def __init__(self, *args, **kwargs):
+		super(CollectionCenter, self).__init__(*args, **kwargs)
+		if self.data=={}:
+			self.queryset=self.queryset.none()
+
+class CollectionCenterListView(ListView):
+	model = CollectionCenter
+	paginated_by = PER_PAGE
+	ordering = ['-id']
+
+	def get_context_data(self, **kwargs):
+		location = self.kwargs['location']
+		inside_kerala = True if location == 'inside_kerala' else False
+		context = super().get_context_data(**kwargs)
+		context['inside_kerala']=inside_kerala
+		context['filter']=CollectionCenterFilter(
+			self.request.GET, 
+			queryset=CollectionCenter.objects.filter(is_inside_kerala=inside_kerala).order_by('-id')
+			)
+		
+		return context
+class CollectionCenterForm(forms.ModelForm):
+	class Meta:
+		model = CollectionCenter
+		fields = [
+		'name',
+		'address',
+		'contacts',
+		'types_of_materials_collecting',
+		'is_inside_kerala',
+		'district',
+		'lsg_name',
+		'ward_name',
+		'city',
+		'map_link'
+		]
+
+		widgets = {
+			'lsg_name': forms.Select(),
+			'ward_name': forms.Select()
+		}
+
+class CollectionCenterView(CreateView):
+	model = CollectionCenter
+	form_class = CollectionCenterForm
+	success_url = '/collection_centers/'
+

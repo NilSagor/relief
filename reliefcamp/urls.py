@@ -20,8 +20,9 @@ from django.views.generic import TemplateView
 
 from refegue import views
 
-urlpatterns = [
-	
+
+app_name = 'refegue'
+urlpatterns = [	
 	path('', views.HomePageView.as_view(), name = 'home'),
 	path('request/', views.CreateRequest.as_view(), name = 'requestview'),
 	path('req_success/', views.ReqSuccess.as_view(), name = 'req_successview'),

@@ -24,13 +24,13 @@
 	Enter location manually</a>
 
 	<div id="placepicker-form" style="display: none;">
-		{% include refegue/placepicker_form.html %}
+		{% include 'refegue/placepicker_form.html' %}
 	</div>
-	{% button %}
+	
 	<button type="submit" class="btn btn-primary">
 		{% bootstrap_icon 'star' %} submit
 	</button>
-	{% endbutton %}
+	
 </form>
 <!-- Instructions -->
 <div id="instructionModal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

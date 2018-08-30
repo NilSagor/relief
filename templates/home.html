@@ -18,7 +18,7 @@
 				<a href="{% static 'img/msg_pm.jpg' %}" class="btn btn-info btn-msg">Message from Prime Minister</a></i>
 				<a href="http:donation.com/donation" class="btn btn-info btn-msg">Donate to Prime Ministe Relief fund</a>
 		</p>
-		<a href="/request/" class="home-button card" role="button">
+		<a href="{% url 'request' %}" class="home-button card" role="button">
 			{% bootstrap_icon 'grain' %}
 			<span class="text">
 				Request <br>For help <br>
