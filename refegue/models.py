@@ -264,14 +264,21 @@ class NGO(models.Model):
 	phone = models.CharField(validators=[phone_regex], max_length =17, blank= True)
 	description = models.TextField(verbose_name = 'About organization')
 	area = models.TextField(verbose_name = 'Area of volunteering')
-	location = models.CharField(max_length = 500, verbose_name = 'Preferred location to volunteer')
-
+	location = models.CharField(
+		max_length = 500, 
+		verbose_name = 'Preferred location to volunteer'
+	)
+	website_url = models.CharField(
+		max_length=300, 
+		verbose_name = "Enter your website link", 
+		default = ''
+	)
 	is_spoc = models.BooleanField(default = False, verbose_name = 'Is point of Contact')
 	joined = models.DateTimeField(auto_now_add= True)
 
 	class Meta:
 		verbose_name =  'Volunteer: NGO'
-		verbose_name_plural = 'Volunteer: NGOs'
+		verbose_name_plural = 'Volunteers: NGOs'
 
 	def __str__(self):
 		return self.name
