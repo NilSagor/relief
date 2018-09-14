@@ -30,6 +30,8 @@ urlpatterns = [
     path('collection_centers/', TemplateView.as_view(template_name = 'refegue/collectioncenter_state_select.html'), name = 'collection_centers_district_select'),
     url(r'collection_centers/(?P<location>\w+)/$', views.CollectionCenterListView.as_view(), name = 'collection_centers_list'),
     path('volunteer/', views.RegisterVolunteer.as_view(), name = 'registerview'),
+    path('volunteerdata/', views.volunteerdata, name= 'volunteerdata'),
     
+
     path('admin/', admin.site.urls),
 ]
