@@ -207,6 +207,7 @@ class Volunteer(models.Model):
 	)
 
 	name = models.CharField(max_length =100),
+	phone_number_regex = RegexValidator(regex ='^((\+91|91|0)[\- ]{0, 1})?[456789]\d{9}$', message = 'Please enter 10 digitsmobile number or landline as 0 <std code><phone number>', code = 'invalid_mobile')
 	phone = models.CharField(
 		max_length = 10,
 		verbose_name = 'Phone',
@@ -229,6 +230,7 @@ class Volunteer(models.Model):
 	is_spoc=models.BooleanField(default = False, verbose_name = 'Is point of Contact')
 	joined = models.DateTimeField(auto_now_add = True)
 	is_active = models.BooleanField(default = True)
+	has_consented = models.BooleanField(default = False, verbose_name = 'Available')
 
 	class Meta:
 		verbose_name = 'Volunteer: individual'
