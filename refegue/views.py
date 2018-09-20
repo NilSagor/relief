@@ -86,6 +86,9 @@ def volunteerdata(request):
 	req_data.lim_page = PAGE_INTERMEDIATE
 	return render(request, 'refegue/volunteerview.html', {'filter': filter, 'data': req_data })
 
+'''
+Ngo view 
+'''
 class RegisterNGO(CreateView):
 	model = NGO
 	fields = [
@@ -102,6 +105,39 @@ class RegisterNGO(CreateView):
 	]
 	success_url = '/reg_success'
 
+def download_ngo_list(request):
+	district = request.GET.get('district', None)
+	filename = 'ngo_list.csv'
+	if district is not None:
+		filename = 'ngo_list_{0}.csv'.format(district)
+		qs = NGO.objects.filter(district = district).order_by('district', 'name')
+	else:
+		qs = NGO.objects.all().order_by('district', 'name')
+	header_row = [
+		'organization',
+		'Type',
+		'Address',
+		'Name',
+		'Phone',
+		'Description',
+		'District',
+		'Area',
+		'Location',
+	]
+	body_rows = qs.values_list(
+		'organization',
+		'organization_type',
+		'organization_address',
+		'name',
+		'phone',
+		'description',
+		'district',
+		'area',
+		'location',
+	)
+	return create_csv_response(filename, header_row, body_rows)
+
+	
 class RegisterPrivateReliefCampForm(forms.ModelForm):
 	class Meta:
 		model = PrivateRescueCamp
