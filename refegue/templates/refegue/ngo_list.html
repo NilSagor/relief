@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block css %}
+
+<style>
+	.table{
+		table-layout: fixed;
+	}
+	.table td{
+		word-wrap: break-word;
+	}
+
+</style>
+<style>
+@media only scream and (max-width: 800px){
+	#requests-table table,  thead, tbody, th, td, tr{
+		display: block;
+	}
+	#requests-table thead tr{
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	#requests-table tr:nth-child(odd){
+		background: #ccc;
+	}
+
+	#requests-table td{
+		border: none;
+		border-bottom: 1px solid #eee;
+		postion: relative;
+		padding-left: 50%;
+	}
+	#requests-table td:before{
+		position: absolute;
+		top: 0;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: normal;
+	}
+	#requests-table td:nth-of-type(1):before{content: "Request Number -";}
+	#requests-table td:nth-of-type(2):before{content: "district -";}
+	#requests-table td:nth-of-type(3):before{content: "location ";}
+	#requests-table td:nth-of-type(4):before{content: "Requestee ";}
+	#requests-table td:nth-of-type(5):before{content: "Phone -";}
+	#requests-table td:nth-of-type(6):before{content: "Date -";}
+	#requests-table td:nth-of-type(7):before{content: "More details -";}
+}
+@media only screen and (max-width: 420px){
+	#requests-table td {
+	min-height: 60px;
+	}
+}
+</style>
+{% endblock css %}
+
+{% block content %}
+<!-- Navigation Breadcrumb -->
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/">Home</a></li>
+		<li class="breadcrumb-item"><a href="{% url ngovolunteerview %}">Register as a volunteer or NGO</a></li>
+		<li class="breadcrumb-item active" aria-current="page">View Registered NGOs/Companies</li>
+	</ol>
+</nav>
+<h1 class="text-center">List of NGO</h1>
+{# <h1 class="text-center">bangla name of this list </h1> #}
+
+<form action="" method="get">
+	{% bootstrap_form filter.form bound_css_class=False %}
+	<input value="View requests" class="btn btn-primary" type="submit">
+</form>
+<div id="requests-table" class="table-responsive">
+	<table id="req-table" class="table">
+		<thead>
+			<tr>
+				<th>District</th>
+				<th>Organization</th>
+				<th>Organization Type</th>
+				<th>Organization Address</th>
+				<th>Name</th>
+				<th>Phone</th>
+				<th>Website</th>
+				<th>Area</th>
+				<th>Location</th>
+				<th>Joined</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for req in data %}
+				<tr>
+					<td>{{ req.get_district_display }}</td>
+					<td>{{ req.organization }}</td>
+					<td>{{ req.organization_type }}</td>
+					<td>{{ req.organization_address }}</td>
+					<td>{{ req.name }}</td>		
+					<td>{{ req.phone }}</td>
+					<td>{{ req.website_url }}</td>
+					<td>{{ req.area }}</td>
+					<td>{{ req.location }}</td>
+					<td>{{ req.joined }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="paginator">
+		<span class="step-links">
+			{% if data.has_previous %}
+				<a href="?page=1&area__icontains={{ request.GET.area__icontains }}">&laquo; first</a>
+				<a href="?page={{data.previous_page_number }}&area__icontains={{ request.GET.area__icontains">previous</a>
+			{% endif %}
+
+			{% for i in data.paginator.page_range %}
+				{% if data.number == i %}
+					<a href="" class="active"><span>{{i}}<span class="sr-only">(current)</span></span></a>
+				{% elif i>data.min_page and i<data.max_page or i|divisibleby:data.lim_page %}
+					<a href="?page={{i}}&area__icontains={{ request.GET.area__icontains}}">{{i}}</a>
+				{% endif %}
+			{% endfor %}
+				{% if data.has_next %}
+					<a href="?page={{ data.next_page_number }}&area__icontains={{ request.GET.area__icontains }}">next</a>
+					<a href="?page={{ data.paginator.num_pages }}&area__icontains={{ request.GET.area__icontains">last &raquo;</a>
+				{% endif %}
+		</span>
+	</div>
+</div>
+{% endblock %}

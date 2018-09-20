@@ -137,6 +137,17 @@ def download_ngo_list(request):
 	)
 	return create_csv_response(filename, header_row, body_rows)
 
+def ngo_list(request):
+	filter = NGOFilter(request.GET, queryset = NGO.objects.all())
+	ngo_data = filter.qs.order_by('-id')
+	paginator = Paginator(ngo_data, PER_PAGE)
+	page = request.GET.get('page')
+	ngo_data = paginator.get_page(page)
+	ngo_data.min_page = ngo_data.number - PAGE_LEFT
+	ngo_data.max_page = ngo_data.number + PAGE_RIGHT
+	ngo_data.lim_page = PAGE_INTERMEDIATE
+
+	return render(request, 'refegue/ngo_list.html', {'filter': filter, 'data': ngo_data})
 	
 class RegisterPrivateReliefCampForm(forms.ModelForm):
 	class Meta:
