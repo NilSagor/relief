@@ -37,6 +37,7 @@ urlpatterns = [
     path('NGO/download/', views.download_ngo_list, name = 'ngo_download_view'),
 
     path('requests/', views.request_list, name = 'requestlistview'),
+    path('request_details/<int:request_id>', views.request_details, name = 'requestdetailsview'),
     path('admin/', admin.site.urls),
 ]
 
