@@ -58,3 +58,62 @@
 }
 </style>
 {% endblock css %}
+
+{% block content %}
+	{% block breadcrumb %}
+		<!-- Navigation Breadcrumb -->
+		<li class="breadcrumb-item"><a href="/">Home</a></li>
+		<li class="breadcrumb-item active" aria-content="page">Registered Requests</li>
+	{% endblock breadcrumb %}
+
+	<h1 class="text-center">Registered Requests</h1>
+	<h2 class="text-center">Bang language</h2>
+	<form action="" class="get">
+		{% bootstrap_form filter.form filter.form bound_css_class=False %}
+		<input type="submit" value="Views requests" class="btn btn-primary">
+	</form>
+
+	<div id="requests-table" class="table-responsive">
+		<table id="req-table" class="table">
+			<thead>
+				<tr>
+					<th>Request Number -</th>
+					<th>District</th>
+					<th>Location</th>
+					<th>Requestee</th>
+					<th>Phone</th>
+					<th>Date</th>
+					<th>Elapsed Time</th>
+					<th>More Details</th>
+					<th>Update</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for req in data %}
+				<tr>
+					<td>{{ req.id }}</td>
+					<td>{{ req.get_district_display }}</td>
+					<td>{{ req.location }}</td>
+					<td>{{ req.requestee }}</td>
+					{% if req.is_old %}
+					<td>Hidden for older requests</td>
+					{% else %}
+					<td><a href="tel:{{ req.requestee_phone }}">{{req.requestee_phone}}</a></td>
+					{% endif %}
+					<td>{{ req.dateadded }}</td>
+					<td>{{ req.dateadded|timesince }}</td>
+					<td><a href="{% url 'requestdetailview' req.id %}" class="btn btn-sm btn-success" target="_blank">More details</a></td>
+					<td><a href="{% url 'requestupdateview' req.id %}" class="btn btn-sm btn-success" target="_blank">Update</a></td>
+				</tr>
+			</tbody>
+		</table>
+		{% include 'includes/pagination.html' %}
+	</div>
+<script>
+	window.addEventListener('load', function(){
+		$
+	})
+</script>
+
+{% endblock content %}

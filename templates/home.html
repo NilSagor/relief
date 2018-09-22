@@ -5,11 +5,13 @@
 {% load bootstrap3 %}
 
 {% block content %}
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item active" aria-current="page">Home</li>
-		</ol>
-	</nav>
+	{% block breadcrumb %}
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item active" aria-current="page">Home</li>
+			</ol>
+		</nav>
+	{% endblock breadcrumb %}
 	<div class="container text-center">
 		<h1 class="main-logo"><span style="font-weight: normal;">Rescue</span></h1>
 		<p style="margin-bottom: 20px;">
