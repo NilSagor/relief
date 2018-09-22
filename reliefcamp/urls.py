@@ -35,6 +35,8 @@ urlpatterns = [
     path('NGO/', views.RegisterNGO.as_view(), name = 'ngoregisterview'),
     path('ngoview/', views.ngo_list, name = 'ngoview'),
     path('NGO/download/', views.download_ngo_list, name = 'ngo_download_view'),
+
+    path('requests/', views.request_list, name = 'requestlistview'),
     path('admin/', admin.site.urls),
 ]
 
