@@ -108,11 +108,13 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<div class="paginator">
+
+	{% include 'includes/pagination.html' %}
+	<!-- <div class="paginator">
 		<span class="step-links">
 			{% if data.has_previous %}
 				<a href="?page=1&area__icontains={{ request.GET.area__icontains }}">&laquo; first</a>
-				<a href="?page={{data.previous_page_number }}&area__icontains={{ request.GET.area__icontains">previous</a>
+				<a href="?page={{ data.previous_page_number }}&area__icontains={{ request.GET.area__icontains">previous</a>
 			{% endif %}
 
 			{% for i in data.paginator.page_range %}
@@ -128,6 +130,6 @@
 				{% endif %}
 		</span>
 	</div>
-	
+	 -->
 </div>
 {% endblock %}
