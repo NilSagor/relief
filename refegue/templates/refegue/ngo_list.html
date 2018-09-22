@@ -27,13 +27,16 @@
 	}
 
 	#requests-table td{
+		/*Behave like a 'row'*/
 		border: none;
 		border-bottom: 1px solid #eee;
 		postion: relative;
 		padding-left: 50%;
 	}
 	#requests-table td:before{
+		/*Now like a table header*/
 		position: absolute;
+		/*top/left values mimic padding*/
 		top: 0;
 		left: 6px;
 		width: 45%;

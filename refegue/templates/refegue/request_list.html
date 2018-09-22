@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block css %}
+
+<style>
+	.table{
+		table-layout: fixed;
+	}
+	.table td{
+		word-wrap: break-word;
+	}
+
+</style>
+<style>
+@media only scream and (max-width: 800px){
+	#requests-table table,  thead, tbody, th, td, tr{
+		display: block;
+	}
+	#requests-table thead tr{
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	#requests-table tr:nth-child(odd){
+		background: #ccc;
+	}
+
+	#requests-table td{
+		/*Behave like a 'row'*/
+		border: none;
+		border-bottom: 1px solid #eee;
+		postion: relative;
+		padding-left: 50%;
+	}
+	#requests-table td:before{
+		/*Now like a table header*/
+		position: absolute;
+		/*top/left values mimic padding*/
+		top: 0;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: normal;
+	}
+	#requests-table td:nth-of-type(1):before{content: "Request Number -";}
+	#requests-table td:nth-of-type(2):before{content: "district -";}
+	#requests-table td:nth-of-type(3):before{content: "location ";}
+	#requests-table td:nth-of-type(4):before{content: "Requestee ";}
+	#requests-table td:nth-of-type(5):before{content: "Phone -";}
+	#requests-table td:nth-of-type(6):before{content: "Date -";}
+	#requests-table td:nth-of-type(7):before{content: "More details -";}
+}
+@media only screen and (max-width: 420px){
+	#requests-table td {
+	min-height: 60px;
+	}
+}
+</style>
+{% endblock css %}
