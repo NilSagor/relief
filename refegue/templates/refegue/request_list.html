@@ -112,8 +112,33 @@
 	</div>
 <script>
 	window.addEventListener('load', function(){
-		$
-	})
+		$("input.search").keyup(search);
+		$('#id_district').selectize();
+	});
+
+	function search(){
+		$("#req-table").find("tr").each(function(i, el) {
+			// skip header row
+			if (i==0) return 
+			el =$(el)
+			var tds = el.find("td")
+			var loc = tds.eq(1).text.toLowerCase()
+			var requestee = tds.eq(2).text.toLowerCase()
+			var phone = tds.eq(3).text()
+			var locKey = $("#search-loc").val().toLowerCase()
+			var reqKey = $("#search-requestee").val().toLowerCase()
+			var phoneKey = $("#search-phone").val()
+
+			if (loc.includes(locKey) && 
+				requestee.includes(reqKey) && 
+				phone.includes(phoneKey))
+			{
+				el.show()
+			}else {
+				el.hide()
+			}
+		})
+	}
 </script>
 
 {% endblock content %}
