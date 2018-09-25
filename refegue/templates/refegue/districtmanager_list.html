@@ -3,12 +3,12 @@
 {% load bootstrap3 %}
 
 {% block content %}
-<nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
+
+	{% block breadcrumb %}
 		<li class="breadcrumb-item"><a href="/">Home</a></li>
 		<li class="breadcrumb-item active" aria-current="page">Contact Info</li>
-	</ol>
-</nav>
+	{% endblock breadcrumb %}
+
 
 <h1 class="text-center">Contact Info</h1>
 <h2 class="text-center">Lorem ipsum dolor sit amet.</h2>
@@ -40,7 +40,7 @@
 
 <script>
 	window.addEventListener('load', function(){
-		$("#id_district").change(()=>{
+		$("#id_district").change(()=> {
 			$("#find-contact-form").submit();
 		})
 		$('#id_district').selectize();

@@ -40,6 +40,8 @@ urlpatterns = [
     path('request_details/<int:request_id>', views.request_details, name = 'requestdetailsview'),
 
     path('contactus/', views.districtmanager_list, name='contactus'),
+
+    path('reg_success/', views.RegSuccess.as_view(), name = 'reg_successview'),
     path('admin/', admin.site.urls),
 ]
 
