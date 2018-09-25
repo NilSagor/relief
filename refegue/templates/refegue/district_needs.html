@@ -1,0 +1,28 @@
+{% extends 'base.html' %} 
+
+{% block breadcrumb %}
+	<li class="breadcrumb-item"><a href="/">Home</a></li>
+	<li class="breadcrumb-item active" aria-current="page">District Needs and Collection Centers</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+	<h1 class="text-center">District Needs &amp; Collection Center</h1>
+	<h2 class="text-center">ban language</h2>
+	<div class="">
+		<table class="table">
+			<tr>
+				<th>District</th>
+				<th>Items required</th>
+				<th>Contents & collection points</th>
+			</tr>
+			{% for item in district_data %}
+			<tr valign="top">
+				<td><strong>{{ item.get_district_display }}</strong></td>
+				<td>{{item.needs|linebreaks}}</td>
+				<td>{{item.cnandpts|linebreaks}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+{% endblock content %}
+

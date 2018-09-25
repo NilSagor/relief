@@ -220,6 +220,14 @@ def districtmanager_list(request):
 	filter = DistrictManagerFilter(request.GET, queryset=DistrictManager.objects.all())
 	return render(request, 'refegue/districtmanager_list.html', {'filter': filter})
 
+class DistNeeds(TemplateView):
+	template_name = 'refegue/district_needs.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['district_data'] = DistrictNeed.objects.all()
+		return context 
+
 class CollectionCenterFilter(django_filters.FilterSet):
 	lsg_name = django_filters.ChoiceFilter()
 	ward_name = django_filters.ChoiceFilter()
