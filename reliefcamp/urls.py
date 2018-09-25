@@ -42,6 +42,7 @@ urlpatterns = [
     path('contactus/', views.districtmanager_list, name='contactus'),
 
     path('reg_success/', views.RegSuccess.as_view(), name = 'reg_successview'),
+    path('req_success/', views.ReqSuccess.as_view(), name = 'req_succesview'),
     path('admin/', admin.site.urls),
 ]
 
