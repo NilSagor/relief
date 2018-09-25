@@ -137,6 +137,18 @@ def download_ngo_list(request):
 	)
 	return create_csv_response(filename, header_row, body_rows)
 
+
+
+def request_list(request):
+	filter = RequestFilter(request.GET, queryset = Request.objects.exclude(status = 'sup'))
+	req_data = filter.qs.order_by('-id')
+	paginator = Paginator(request_data, PER_PAGE)
+	page = request.GET.get('page')
+	req_data.min_page = req_data.number - PAGE_LEFT
+	req_data.max_page = req_data.number + PAGE_RIGHT
+	req_data.lim_page = PAGE_INTERMEDIATE
+	return render
+
 def ngo_list(request):
 	filter = NGOFilter(request.GET, queryset = NGO.objects.all())
 	ngo_data = filter.qs.order_by('-id')
@@ -194,7 +206,15 @@ class ReqSuccess(TemplateView):
 class RegSuccess(TemplateView):
 	template_name = 'refegue/reg_success.html'
 
+class DistrictManagerFilter(django_filters.FilterSet):
+	class Meta:
+		model: DistrictManager
+		fields: ['districts']
 
+	def __init__(self, *args, **kwargs):
+		super(DistrictManagerFilter, self).__init__(*args, **kwargs)
+		if self.data == {}
+			self.queryset = self.queryset.none()
 
 def districtmanager_list(request):
 	filter = DistrictManagerFilter(request.GET, queryset=DistrictManager.objects.all())

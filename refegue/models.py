@@ -335,7 +335,7 @@ class DistrictManager(models.Model):
 		verbose_name_plural = 'Districts: Managers'
 
 	def __str__(self):
-		return self.name + ' '+self.get_district_display
+		return self.name + ' ' + self.get_district_display()
 
 class DistrictNeed(models.Model):
 	district = models.CharField(
