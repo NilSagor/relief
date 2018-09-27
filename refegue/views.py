@@ -194,6 +194,18 @@ class RegisterPrivateReliefcamp(CreateView):
 	success_url = '/pcamp'
 	form_class = RegisterPrivateReliefCampForm
 
+class RegisterContributor(CreateView):
+	model = Contributor
+	fields = [
+		'name',
+		'district',
+		'phone',
+		'address',
+		'contribution_type',
+		'contrib_details'
+	]
+	success_url = '/contrib_success/'
+	 	
 def privatecc(request):
 	return render(request, 'privatecc.html')
 
