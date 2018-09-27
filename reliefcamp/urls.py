@@ -23,6 +23,7 @@ from refegue import views
 
 app_name = 'refegue'
 urlpatterns = [	
+
 	path('', views.HomePageView.as_view(), name = 'home'),
 	path('request/', views.CreateRequest.as_view(), name = 'requestview'),
 	path('req_success/', views.ReqSuccess.as_view(), name = 'req_successview'),
@@ -44,6 +45,7 @@ urlpatterns = [
     path('reg_success/', views.RegSuccess.as_view(), name = 'reg_successview'),
     path('req_success/', views.ReqSuccess.as_view(), name = 'req_succesview'),
     path('district_nedds/', views.DistNeeds.as_view(), name = 'distNeedsview'),
+
     path('admin/', admin.site.urls),
 ]
 

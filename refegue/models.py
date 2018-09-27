@@ -297,14 +297,21 @@ class Contributor(models.Model):
 		choices = districts,
 	)
 	name = models.CharField(max_length = 100, verbose_name = 'Name')
+	phone_rumber_regex = RegexValidator(regex='^((91|91|0)[\-]{0, 1})?[456789]\d{9}$', message = 'Please Enter 10 digits mobile number or landline as 0<std code><phone number>', code='invalid_mobile')
 	phone = models.CharField(
-		max_length = 10, 
+		max_length = 14, 
 		verbose_name = 'Phone -', 
-		validators = [RegexValidator(regex='^[6-9]\d{9}$', 
-		message = 'Please Enter 10 digit mobile', 
-		code = 'invalid_mobile')])
+		validators = [phone_number_regex], 
+		)
+
 	address = models.TextField(verbose_name = 'Address')
-	commodities = models.TextField(verbose_name = 'What you can contributor. (..)')
+	contrib_details = models.TextField(verbose_name = 'Details of contribution Eg: 10 shirts', default ='')
+	contribution_type = models.CharField(
+		max_length = 3,
+		choices = contribution_type,
+		default = 'oth'
+	)
+	
 	status = models.CharField(
 		max_length = 10,
 		choices = contrib_status_types, 
@@ -316,7 +323,7 @@ class Contributor(models.Model):
 		verbose_name_plural = 'Contributors:Donations'
 
 	def __str__(self):
-		return self.name + ' '+ self.get_district_display
+		return self.name + ' ' + self.get_district_display()
 
 
 class DistrictManager(models.Model):
