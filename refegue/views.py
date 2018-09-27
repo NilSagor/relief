@@ -205,6 +205,7 @@ class RegisterContributor(CreateView):
 		'contrib_details'
 	]
 	success_url = '/contrib_success/'
+
 class ContribFilter(django_filters.FilterSet):
 	class Meta:
 		model = Contributor
@@ -246,6 +247,9 @@ class RegSuccess(TemplateView):
 
 class ContribSuccess(TemplateView):
 	template_name = 'refegue/contrib_success.html'
+	
+class DisclaimerPage(TemplateView):
+	template_name = 'refegue/disclaimer.html'
 
 class DistrictManagerFilter(django_filters.FilterSet):
 	class Meta:
