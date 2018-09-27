@@ -205,7 +205,17 @@ class RegisterContributor(CreateView):
 		'contrib_details'
 	]
 	success_url = '/contrib_success/'
-	 	
+def contributors(request):
+	filter = ContribFilter(request.GET, queryset = Contributor.objects.all())
+	contrib_data = filter.qs.order_by('-id')
+	paginator = Paginator(contrib_data, PER_PAGE)
+	page = request.GET.get('page')
+	contrib_data.min_page = contrib_data.number - PAGE_LEFT
+	contrib_data.max_page = contrib_data.number + PAGE_RIGHT
+	contrib_data.lim_page = PAGE_INTERMEDIATE
+
+	return render(request, 'refegue/contrib_list.html', {'filter': filter, 'data': contrib_data})
+
 def privatecc(request):
 	return render(request, 'privatecc.html')
 
