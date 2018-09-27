@@ -205,6 +205,22 @@ class RegisterContributor(CreateView):
 		'contrib_details'
 	]
 	success_url = '/contrib_success/'
+class ContribFilter(django_filters.FilterSet):
+	class Meta:
+		model = Contributor
+		fileds = {
+			'district':	['exact'],
+			'name':		['icontains'],
+			'phone':	['exact'],
+			'status':	['exact'],
+			'address':	['icontains'],
+			'contrib_details': 	['icontains']
+		}
+	def __init__(self, *args, **kwargs):
+		super(ContribFilter, self).__init__(*args, **kwargs)
+		if self.data == {}:
+			self.queryset = self.queryset.none()
+
 def contributors(request):
 	filter = ContribFilter(request.GET, queryset = Contributor.objects.all())
 	contrib_data = filter.qs.order_by('-id')
@@ -227,6 +243,9 @@ class ReqSuccess(TemplateView):
 
 class RegSuccess(TemplateView):
 	template_name = 'refegue/reg_success.html'
+
+class ContribSuccess(TemplateView):
+	template_name = 'refegue/contrib_success.html'
 
 class DistrictManagerFilter(django_filters.FilterSet):
 	class Meta:
