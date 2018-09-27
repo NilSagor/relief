@@ -49,6 +49,9 @@ urlpatterns = [
 
     path('reg_contrib/', views.RegisterContributor.as_view(), name = 'reg_contribview'),
     path('contribview/', views.contributors, name = 'contribview'),
+    path('contrib_success/', views.ContribSuccess.as_view(), name = 'contribsuccessview'),
+
+    path('disclaimer/', views.DisclaimerPage.as_view(), name = 'disclaimer'),
 
     path('admin/', admin.site.urls),
 ]
