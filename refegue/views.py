@@ -6,11 +6,12 @@ from django.http import HttpResponseRedirect
 from django.views.generic.list import ListView
 
 import django_filters
+from django.conf import settings
 
 from collections import OrderedDict
 
 from django import forms
-from .models import Request, DistrictManager, Volunteer, NGO, PrivateRescueCamp, CollectionCenter
+from .models import Request, DistrictManager, Volunteer, NGO, PrivateRescueCamp, CollectionCenter, Contributor
 from refegue.sms_handler import send_confirmation_sms
 
 # Create your views here.
@@ -160,6 +161,18 @@ def ngo_list(request):
 	ngo_data.lim_page = PAGE_INTERMEDIATE
 
 	return render(request, 'refegue/ngo_list.html', {'filter': filter, 'data': ngo_data})
+
+def request_details(request, request_id = None):
+	if not request_id:
+		return HttpResponseRedirect('/error?error_text={}'.format('Page not found'))
+	filter = RequestFilter(None)
+	try:
+		req_data = RequestUpdate.objects.get(id = request_id)
+		updates = RequestUpdate.objects.all().filter(request_id=request_id).order_by('-update_ts')
+	except Exception as e:
+		return HttpResponseRedirect('/error?error_text={}'.format('Sorry, we couldnot fetch details for that request'))
+		return render(request, 'refegue/request_details.html', {'filter':filter, 'req':req_data, 'updates': updates})
+		raise e
 	
 class RegisterPrivateReliefCampForm(forms.ModelForm):
 	class Meta:
@@ -209,14 +222,15 @@ class RegisterContributor(CreateView):
 class ContribFilter(django_filters.FilterSet):
 	class Meta:
 		model = Contributor
-		fileds = {
-			'district':	['exact'],
-			'name':		['icontains'],
-			'phone':	['exact'],
-			'status':	['exact'],
-			'address':	['icontains'],
-			'contrib_details': 	['icontains']
+		fields = {
+			'district':['exact'],
+			'name':['icontains'],
+			'phone':['exact'],
+			'status':['exact'],
+			'address':['icontains'],
+			'contrib_details':['icontains'],
 		}
+
 	def __init__(self, *args, **kwargs):
 		super(ContribFilter, self).__init__(*args, **kwargs)
 		if self.data == {}:
@@ -251,6 +265,9 @@ class ContribSuccess(TemplateView):
 class DisclaimerPage(TemplateView):
 	template_name = 'refegue/disclaimer.html'
 
+class AboutIEEE(TemplateView):
+	template_name = 'refegue/aboutieee.html'
+
 class DistrictManagerFilter(django_filters.FilterSet):
 	class Meta:
 		model: DistrictManager
@@ -258,7 +275,7 @@ class DistrictManagerFilter(django_filters.FilterSet):
 
 	def __init__(self, *args, **kwargs):
 		super(DistrictManagerFilter, self).__init__(*args, **kwargs)
-		if self.data == {}
+		if self.data == {}:
 			self.queryset = self.queryset.none()
 
 def districtmanager_list(request):

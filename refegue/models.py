@@ -107,6 +107,21 @@ announcement_priorities = (
 	('M', 'Medium'),
 	('L', 'Low'))
 
+person_status = (
+	('new', 'New'),
+	('checked_out', 'Checked Out'),
+	('closed', 'Closed')
+ )
+
+contribution_type = (
+	('food', 'Food'),
+	('med', 'Medicines'),
+	('shl', 'Shelter'),
+	('clt', 'Clothing'),
+	('sny', 'Sanitary materials'),
+	('oth', 'Others')
+)
+
 class LSGTypes(Enum):	
 	CORPORATION = 0
 	MUNICIPALITY = 1
@@ -297,7 +312,7 @@ class Contributor(models.Model):
 		choices = districts,
 	)
 	name = models.CharField(max_length = 100, verbose_name = 'Name')
-	phone_rumber_regex = RegexValidator(regex='^((91|91|0)[\-]{0, 1})?[456789]\d{9}$', message = 'Please Enter 10 digits mobile number or landline as 0<std code><phone number>', code='invalid_mobile')
+	phone_number_regex = RegexValidator(regex='^((91|91|0)[\-]{0, 1})?[456789]\d{9}$', message = 'Please Enter 10 digits mobile number or landline as 0<std code><phone number>', code='invalid_mobile')
 	phone = models.CharField(
 		max_length = 14, 
 		verbose_name = 'Phone -', 

@@ -52,6 +52,7 @@ urlpatterns = [
     path('contrib_success/', views.ContribSuccess.as_view(), name = 'contribsuccessview'),
 
     path('disclaimer/', views.DisclaimerPage.as_view(), name = 'disclaimer'),
+    path('ieee/', views.AboutIEEE.as_view(), name = 'aboutieee'),
 
     path('admin/', admin.site.urls),
 ]
