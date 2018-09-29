@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	{% block breadcrumb %}
+		<li class="breadcrumb-item"><a href="/">Home</a></li>
+		<li class="breadcrumb-item"><a href="{% url 'privatedetail' %}">Private Relief & Collection Centers</a></li>
+		<li class="breadcrumb-item activate" aria-current="page">View Private Relief Camps</li>
+	{% endblock breadcrumb %}
+
+	<h2 align="center">Private Camp List</h2>
+	<hr>
+	<div class="text-center text-danger">
+		{% if messages %}
+		 {% for message in messages %}
+		 	<h4>{{ message}}</h4>
+		 {% endofor %}
+		{% endif %}
+	</div>
+
+	<form action="" method="get" align="center">
+		{{ filter.form.as_p }}
+		<button type="submit" class="btn btn-default"><strong>Show Private Camps</strong></button>
+	</form>
+
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Center</th>
+				<th>Name</th>
+				<th>District</th>
+				<th>LSG Type/LSG Name</th>
+				<th>Total people</th>
+				<th>Contact Information</th>
+				<th>Details</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in data %}
+				<tr>
+					<td>{{ item.id }}</td>
+					<td><strong>{{ item.name }}</strong></td>
+					<td>{{ item.get_district_display }}</td>
+					<td>{{ item.get_lsg_type_display }}</td>
+					<td>{{ item.total_people }}</td>
+					<td>{{ item.contacts }}</td>
+					<td>
+						<div class="btn-group">
+							<a href="{% url 'privatedetails' %}?id={{item.id}}" class="btn btn-default">Camp Details</a>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% include 'includes/pagination.html' %}
+{% endblock content %}
