@@ -54,6 +54,7 @@ urlpatterns = [
     path('disclaimer/', views.DisclaimerPage.as_view(), name = 'disclaimer'),
     path('ieee/', views.AboutIEEE.as_view(), name = 'aboutieee'),
     
+    path('pcamp/', views.pcamplist, name = 'privatecamplist'),
     path('pcampadd', views.RegisterPrivateReliefCamp.as_view(), name = 'Private Camps'),
 
     path('admin/', admin.site.urls),

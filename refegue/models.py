@@ -541,16 +541,33 @@ class ReliefCampData(models.Model):
 		return self.description[:100]
 
 class PrivateRescueCamp(models.Model):
+
 	name = models.CharField(max_length = 50, verbose_name = 'Camp Name')
 	location = models.TextField(blank = True, null = True, verbose_name = 'location')
 	district = models.CharField(
 		max_length = 15,
 		choices = districts
 		)
-	lsg_name = models.CharField(max_length = 150, null = True, blank = True, verbose_name = 'lsg name')
-	ward_name = models.CharField(max_length = 150, null = True, blank = True, verbose_name = 'Ward')
-	contacts = models.TextField( verbose_name = 'Phone number', blank = True, null = True)
-	facilities_available = models.TextField(blank = True, null = True, verbose_name = 'Facilities Available')
+	lsg_name = models.CharField(
+		max_length = 150, 
+		null = True, 
+		blank = True, 
+		verbose_name = 'lsg name'
+	)
+	ward_name = models.CharField(
+		max_length = 150, 
+		null = True, 
+		blank = True, 
+		verbose_name = 'Ward'
+	)
+	contacts = models.TextField( 
+		verbose_name = 'Phone number', 
+		blank = True, null = True
+	)
+	facilities_available = models.TextField(
+		blank = True, 
+		null = True, 
+		verbose_name = 'Facilities Available')
 	map_link = models.CharField(max_length =250,  verbose_name = 'Map link', blank = True, null=True, help_text = 'Copy and paste the full link')
 	latlng = models.CharField(max_length = 100, verbose_name = 'GPS Coordinates', blank = True, help_text = 'Comma separated latlng field')
 
@@ -568,8 +585,9 @@ class PrivateRescueCamp(models.Model):
 	status = models.CharField(
 		max_length = 10,
 		choices = relief_camp_status,
-		default = 'active'
+		default = 'active',
 		)
+
 	class Meta:
 		verbose_name = 'Private Relief: Camp'
 		verbose_name_plural = 'Private Relief Camp: Camps'

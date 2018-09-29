@@ -208,6 +208,15 @@ class RegisterPrivateReliefcamp(CreateView):
 	success_url = '/pcamp'
 	form_class = RegisterPrivateReliefCampForm
 
+def pcamplist(request):
+	filter = PrivateCampFilter(request.GET, queryset = PrivateRescueCamp.objects.all())
+	data = filter.qs.order_by('-id')
+	paginator = Paginator(data, 50)
+	page = request.GET.get('page')
+	data = paginator.get_page(page)
+
+	return render(request, 'refegue/pcamplist.html', {'filter': filter, 'data': data})
+
 class RegisterContributor(CreateView):
 	model = Contributor
 	fields = [
