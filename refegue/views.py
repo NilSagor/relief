@@ -217,6 +217,15 @@ def pcamplist(request):
 
 	return render(request, 'refegue/pcamplist.html', {'filter': filter, 'data': data})
 
+def pcampdetails(request):
+	if('id' not in request.GET.keys()): return HttpResponseRedirect('/pcamp')
+	id = request.GET.get('id')
+	try:
+		req_data = PrivateRescueCamp.objects.get(id = id)
+	except Exception as e:
+		return HttpResponseRedirect("/error?error_text={}".format('Sorry, we could not fetch details for that camp'))
+		return render(request, 'refegue/p_camp_details.html', {'req': req_data})
+
 class RegisterContributor(CreateView):
 	model = Contributor
 	fields = [
