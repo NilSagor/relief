@@ -7,6 +7,7 @@ from django.views.generic.list import ListView
 
 import django_filters
 from django.conf import settings
+from django.urls import reverse
 
 from collections import OrderedDict
 
@@ -55,7 +56,7 @@ class CreateRequest(CreateView):
 		'detailtoilet',
 		'needothers',
 		]
-	success_url = '/req_rescue/'
+	success_url = '/req_success/'
 
 	def form_valid(self, form):
 		self.object = form.save()
@@ -143,12 +144,12 @@ def download_ngo_list(request):
 def request_list(request):
 	filter = RequestFilter(request.GET, queryset = Request.objects.exclude(status = 'sup'))
 	req_data = filter.qs.order_by('-id')
-	paginator = Paginator(request_data, PER_PAGE)
+	paginator = Paginator(req_data, PER_PAGE)
 	page = request.GET.get('page')
 	req_data.min_page = req_data.number - PAGE_LEFT
 	req_data.max_page = req_data.number + PAGE_RIGHT
 	req_data.lim_page = PAGE_INTERMEDIATE
-	return render
+	return render(request, 'refegue/request_list.html', {'filter': filter, 'data': req_data })
 
 def ngo_list(request):
 	filter = NGOFilter(request.GET, queryset = NGO.objects.all())
