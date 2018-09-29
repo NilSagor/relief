@@ -203,7 +203,7 @@ class RegisterPrivateReliefCampForm(forms.ModelForm):
 			'ward_name': forms.Select()
 		}
 
-class RegisterPrivateReliefcamp(CreateView):
+class RegisterPrivateReliefCamp(CreateView):
 	model = PrivateRescueCamp
 	success_url = '/pcamp'
 	form_class = RegisterPrivateReliefCampForm
