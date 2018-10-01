@@ -57,6 +57,7 @@ urlpatterns = [
     path('pcamp/', views.pcamplist, name = 'privatecamplist'),
     path('pcampadd', views.RegisterPrivateReliefCamp.as_view(), name = 'Private Camps'),
     path('pcampdet/', views.pcampdetails, name = 'privatecampdetails'),
+    path('privatecc/', views.privatecc, name = 'privatedetials'),
 
     path('admin/', admin.site.urls),
 ]
