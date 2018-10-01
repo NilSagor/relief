@@ -8,4 +8,4 @@ install:
 
 
 script:
-  - python manage.py test --settings=reliefcamp.test_settings
+  - python manage.py test refegue
