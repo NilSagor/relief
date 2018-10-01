@@ -5,8 +5,7 @@ python:
 install:
   - pip install -r requirements.txt
 
-before_script:
-  - sqlite -c 'create database test_db;' - sqlite
+
 
 script:
   - python manage.py test --settings=reliefcamp.test_settings
