@@ -269,6 +269,10 @@ def contributors(request):
 def privatecc(request):
 	return render(request, 'privatecc.html')
 
+def error(request):
+	error_text = request.GET.get('error_text')
+	return render(request, 'refegue/error.html', {'error_text': error_text})
+
 class HomePageView(TemplateView):
 	template_name = 'home.html'
 
